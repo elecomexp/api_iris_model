@@ -56,6 +56,6 @@ def save_model(model, model_path=MODEL_PATH):
         os.makedirs(directory)
 
     print('Saving the trained model...')
-    with open(model_path, "wb") as model_file:
+    with open(model_path, 'wb') as model_file:
         pickle.dump(model, model_file)
     print(f'Model trained and saved at {model_path}')
