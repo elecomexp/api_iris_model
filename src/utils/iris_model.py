@@ -32,7 +32,7 @@ def train_model(data_path=DATA_PATH):
     """
     # Check if the dataset exists
     if not os.path.exists(data_path):
-        raise FileNotFoundError(f'Dataset not found at {data_path}.')
+        raise FileNotFoundError(f'Dataset not found at {data_path}')
 
     print('Loading dataset...')
     data = pd.read_csv(data_path)
@@ -58,4 +58,4 @@ def save_model(model, model_path=MODEL_PATH):
     print('Saving the trained model...')
     with open(model_path, "wb") as model_file:
         pickle.dump(model, model_file)
-    print(f'Model trained and saved at {model_path}.')
+    print(f'Model trained and saved at {model_path}')
