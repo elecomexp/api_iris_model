@@ -62,7 +62,7 @@ def train_model(data_path=DATA_PATH):
     """
     print('Loading dataset...')
     data = pd.read_csv(data_path)
-    X = data.iloc[:, :-1]  # Assuming the last column is the target
+    X = data.iloc[:, :-1]
     y = data['species']
     
     # Initialize and train the model
