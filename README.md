@@ -10,15 +10,11 @@ A simple lightweight API built with [Flask](https://flask.palletsprojects.com/en
 
 ## Deployment
 
-The API is hosted on [PythonAnywhere](https://www.pythonanywhere.com/), making it accessible from any device with an internet connection.
+The API is hosted on PythonAnywhere, making it accessible from any device with an internet connection.
 
 ## Usage
 
 1. Clone the repository.
-2. Set up the virtual environment with the correct version of Python, use the following command:
-```bash
-mkvirtualenv --python=/usr/bin/python3.10 venv_iris
-```
+2. Set up the virtual environment with **Python 3.10**.
 3. Install the requiered dependencies
-2. Run the Flask app locally or deploy it on PythonAnywhere.
-3. Use tools like curl or Postman to send data and receive predictions.
+4. Run the Flask app locally or deploy it on PythonAnywhere.

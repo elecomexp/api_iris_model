@@ -128,7 +128,7 @@ def retrain():
         return jsonify({'error': 'Dataset for retraining not found'}), 404
 
 
-# # LUIS
+# # LUIS TAMAYO
 # @app.route('/webhook', methods=['POST'])
 # def webhook():
 #     repo_path = '/home/LuTaOr/Despliegue_API'
