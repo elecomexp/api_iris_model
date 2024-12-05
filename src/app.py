@@ -52,9 +52,6 @@ os.chdir(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-# Function to load or initialize the model
-model = load_or_initialize_model()
-
 # Landing page route
 @app.route('/', methods=['GET'])
 def home():
@@ -73,6 +70,9 @@ def home():
         status=200,
         mimetype='application/json'
     )
+
+# Function to load or initialize the model
+model = load_or_initialize_model()
 
 @app.route('/api/v1/predict', methods=['GET'])
 def predict():
