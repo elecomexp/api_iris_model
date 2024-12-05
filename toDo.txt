@@ -7,3 +7,4 @@ Hacer Pipelines para que el modelo:
 La ventana de bienvenida se podría mejorar como ha dicho Luis
 
 Preguntar a Luis como ha implementado la linea 111 del wsgi para el despliegue online: ¿from app import app as application  # noqa?
+
