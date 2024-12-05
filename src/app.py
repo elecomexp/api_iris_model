@@ -1,3 +1,24 @@
+"""
+app.py
+
+Author: Lander Combarro Exposito
+Created: 2024/04/12
+Last Modified: 2024/04/12
+
+Iris Model Prediction API
+-------------------------
+This Flask API provides functionality for predicting the species of an Iris flower
+based on its sepal and petal measurements. The model is a Logistic Regression 
+trained on the Iris dataset.
+
+Endpoints
+---------
+- GET /api/v1/predict: Predict the Iris flower species based on input features (sepal_length, sepal_width, petal_length, petal_width).
+- GET /api/v1/retrain: Re-train the model with a new dataset and update the saved model.
+- POST /webhook: Update the model by pulling the latest changes from the GitHub repository (used for deployment).
+
+The API also includes basic error handling for missing or invalid parameters, and ensures that the model is always available for predictions.
+"""
 
 # Libraries
 import json
