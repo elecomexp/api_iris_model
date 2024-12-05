@@ -15,6 +15,7 @@ Endpoints
 ---------
 - GET /api/v1/predict: Predict the Iris flower species based on input features (sepal_length, sepal_width, petal_length, petal_width).
 - GET /api/v1/retrain: Re-train the model with a new dataset and update the saved model.
+- GET /api/v1/accuracy: Calculate and return the accuracy of the current trained model on the validation dataset. 
 - POST /webhook: Update the model by pulling the latest changes from the GitHub repository (used for deployment).
 
 The API also includes basic error handling for missing or invalid parameters, and ensures that the model is always available for predictions.
@@ -23,10 +24,14 @@ The API also includes basic error handling for missing or invalid parameters, an
 # Libraries
 import json
 import os
-from flask import Flask, jsonify, request
 
-from utils.iris_model import load_or_initialize_model, save_model, train_model
-from utils.variables import CLASS_MAPPING, DATA_PATH, MODEL_PATH
+from flask import Flask, jsonify, request
+from sklearn.metrics import accuracy_score
+
+from utils.iris_model import (initialize_model, load_data, load_model,
+                              save_model, train_model)
+from utils.variables import (CLASS_MAPPING, MODEL_PATH, TRAIN_PATH,
+                             VALIDATION_PATH)
 
 # Change the current working directory to the directory of this script
 os.chdir(os.path.dirname(__file__))
@@ -36,7 +41,7 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 
 # Function to load or initialize the model
-model = load_or_initialize_model()
+model = initialize_model(train_path=TRAIN_PATH, model_path=MODEL_PATH)
 
 # Landing page route
 @app.route('/', methods=['GET'])
@@ -46,7 +51,8 @@ def home():
         'message': 'Welcome to the Iris model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
-            '/api/v1/retrain': 'Retrains the model with a new dataset (GET)'
+            '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
+            '/api/v1/accuracy': 'Shows the current accuracy of the model (GET)'
         },
         'example': {
             '/api/v1/predict?sepal_length=5.0&sepal_width=3.6&petal_length=1.4&petal_width=0.2': 
@@ -94,24 +100,36 @@ def predict():
 
 @app.route('/api/v1/retrain', methods=['GET'])
 def retrain():
-    if os.path.exists(DATA_PATH):
+    if os.path.exists(TRAIN_PATH):
         try:
             # Retrain the model with the existing dataset
-            model = train_model(data_path=DATA_PATH)
-            save_model(model, model_path=MODEL_PATH)
+            model = train_model(train_path=TRAIN_PATH)
+            save_model(model=model, model_path=MODEL_PATH)
             
-            # Optionally, evaluate the accuracy (uncomment if desired)
-            # accuracy = accuracy_score(y_test, model.predict(X_test))
-            # return jsonify({'message': 'Model retrained successfully', 'accuracy': accuracy})
+            # Evaluate the new accuracy
+            X_val, y_val = load_data(data_path=VALIDATION_PATH)
+            accuracy = accuracy_score(y_true=y_val, y_pred=model.predict(X_val))
+            return jsonify({'message': 'Model retrained successfully', 'accuracy': str(accuracy)})
             
-            return jsonify({'message': 'Model retrained successfully'})
+            # return jsonify({'message': 'Model retrained successfully'})
         except Exception as e:
             # Handle any errors during training or saving
             return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
     else:
         # Return error if dataset is not found
         return jsonify({'error': 'Dataset for retraining not found'}), 404
-
+    
+@app.route('/api/v1/accuracy', methods=['GET'])
+def accuracy():
+    try:
+        X_val, y_val = load_data(data_path=VALIDATION_PATH)
+        model = load_model(model_path=MODEL_PATH)
+        accuracy = accuracy_score(y_true=y_val, y_pred=model.predict(X_val))
+        return jsonify({'accuracy': str(accuracy)})
+        
+    except Exception as e:
+        # Handle any errors during training or saving
+        return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
 # # LUIS TAMAYO
 # @app.route('/webhook', methods=['POST'])
