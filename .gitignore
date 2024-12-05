@@ -1,1 +1,5 @@
-.venv_iris
+# Ignore virtual environments
+.venv*
+
+# Ignore automatically generated files and directories
+__pycache__/
