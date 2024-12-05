@@ -50,7 +50,7 @@ def home():
         },
         'example': {
             '/api/v1/predict?sepal_length=5.0&sepal_width=3.6&petal_length=1.4&petal_width=0.2': 
-                'Add an endpoint like this one to predict the species of the Iris flower using the provided feature values.'
+                'Add an endpoint like this one to predict the species of the Iris flower using the provided feature values'
         }
     }
 
@@ -69,7 +69,9 @@ def predict():
         petal_length = float(request.args.get('petal_length'))
         petal_width = float(request.args.get('petal_width'))
     except (TypeError, ValueError):
-        return jsonify({'error': 'Please provide valid numeric values for all parameters: sepal_length, sepal_width, petal_length, and petal_width.'}), 400
+        return jsonify({'error': 
+            'Please provide valid numeric values for all parameters: sepal_length, sepal_width, petal_length, and petal_width'
+            }), 400
 
     # Perform prediction
     try:
