@@ -44,6 +44,7 @@ app.config['DEBUG'] = True
 download_data(data_path=DATA_PATH)
 model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 
+
 # Landing page route
 @app.route('/', methods=['GET'])
 def home():
@@ -68,6 +69,8 @@ def home():
         mimetype='application/json'
     )
 
+
+# Perform prediction
 @app.route('/api/v1/predict', methods=['GET'])
 def predict():
     try:
@@ -80,7 +83,6 @@ def predict():
             'Please provide valid numeric values for all parameters: sepal_length, sepal_width, petal_length, and petal_width'
             }), 400
 
-    # Perform prediction
     try:
         prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
         class_name = CLASS_MAPPING[int(prediction[0])]
@@ -99,25 +101,26 @@ def predict():
         }
     })
 
+
+# Retrain the model with existing dataset and evaluate the new accuracy
 @app.route('/api/v1/retrain', methods=['GET'])
 def retrain():
     if os.path.exists(DATA_PATH):
         try:
-            # Retrain the model with the existing dataset
             X_train, X_val, y_train, y_val = load_data(data_path=DATA_PATH)
             model = train_model(X_train=X_train, y_train=y_train)
             save_model(model=model, model_path=MODEL_PATH)
             
-            # Evaluate the new accuracy
             accuracy = accuracy_score(y_true=y_val, y_pred=model.predict(X_val))
             return jsonify({'message': 'Model retrained successfully', 'accuracy': str(accuracy)})
             
         except Exception as e:
             return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
     else:
-        # Return error if dataset is not found
         return jsonify({'error': 'Dataset for retraining not found'}), 404
-    
+
+
+# Calculate and return the accuracy of the current saved model on a validation dataset
 @app.route('/api/v1/accuracy', methods=['GET'])
 def accuracy():
     try:
@@ -129,6 +132,8 @@ def accuracy():
     except Exception as e:
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
+
+# Webhook
 @app.route('/webhook', methods=['POST'])
 def webhook():
     repo_path = '/home/elecomexp/api_iris_model'
@@ -142,6 +147,7 @@ def webhook():
         return jsonify({'error': 'Solicitud no válida'}), 400
 
 
+# Main
 if __name__ == '__main__':
     app.run()
 
