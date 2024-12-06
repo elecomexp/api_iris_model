@@ -10,7 +10,7 @@ A simple lightweight API built with [Flask](https://flask.palletsprojects.com/en
 
 ## Deployment
 
-The API is hosted on PythonAnywhere, making it accessible from any device with an internet connection.
+The API is hosted in https://elecomexp.pythonanywhere.com/, making it accessible from any device with an internet connection.
 
 ## Usage
 
