@@ -1,10 +1,13 @@
-# Absolute paths
-# DATA_PATH = '/home/Elecomexp/iris_model_API/src/data/iris.csv'
-# MODEL_PATH = '/home/Elecomexp/iris_model_API/src/model/iris_model.pkl'
+"""
+variables.py
+
+Author: Lander Combarro Exposito
+Created: 2024/04/12
+Last Modified: 2024/04/12
+"""
 
 # Relative paths
-TRAIN_PATH = './data/iris_train.csv'
-VALIDATION_PATH = './data/iris_validation.csv'
+DATA_PATH = './data/iris.csv'
 MODEL_PATH = './model/iris_model.pkl'
 
 # Class mapping to Iris flower species names

@@ -29,10 +29,9 @@ import subprocess
 from flask import Flask, jsonify, request
 from sklearn.metrics import accuracy_score
 
-from utils.iris_model import (initialize_model, load_data, load_model,
-                              save_model, train_model)
-from utils.variables import (CLASS_MAPPING, MODEL_PATH, TRAIN_PATH,
-                             VALIDATION_PATH)
+from utils.iris_model import (download_data, load_or_initialize_model, load_data,
+                              load_model, save_model, train_model)
+from utils.variables import CLASS_MAPPING, DATA_PATH, MODEL_PATH
 
 # Change the current working directory to the directory of this script
 os.chdir(os.path.dirname(__file__))
@@ -41,15 +40,16 @@ os.chdir(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-# Function to load or initialize the model
-model = initialize_model(train_path=TRAIN_PATH, model_path=MODEL_PATH)
+# Download data. Load or initi
+download_data(data_path=DATA_PATH)
+model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 
 # Landing page route
 @app.route('/', methods=['GET'])
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'LOLOLOLO Welcome to the Iris model prediction API',
+        'message': 'Welcome to the Iris model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
@@ -101,20 +101,18 @@ def predict():
 
 @app.route('/api/v1/retrain', methods=['GET'])
 def retrain():
-    if os.path.exists(TRAIN_PATH):
+    if os.path.exists(DATA_PATH):
         try:
             # Retrain the model with the existing dataset
-            model = train_model(train_path=TRAIN_PATH)
+            X_train, X_val, y_train, y_val = load_data(data_path=DATA_PATH)
+            model = train_model(X_train=X_train, y_train=y_train)
             save_model(model=model, model_path=MODEL_PATH)
             
             # Evaluate the new accuracy
-            X_val, y_val = load_data(data_path=VALIDATION_PATH)
             accuracy = accuracy_score(y_true=y_val, y_pred=model.predict(X_val))
             return jsonify({'message': 'Model retrained successfully', 'accuracy': str(accuracy)})
             
-            # return jsonify({'message': 'Model retrained successfully'})
         except Exception as e:
-            # Handle any errors during training or saving
             return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
     else:
         # Return error if dataset is not found
@@ -123,13 +121,12 @@ def retrain():
 @app.route('/api/v1/accuracy', methods=['GET'])
 def accuracy():
     try:
-        X_val, y_val = load_data(data_path=VALIDATION_PATH)
+        X_train, X_val, y_train, y_val = load_data(data_path=DATA_PATH)
         model = load_model(model_path=MODEL_PATH)
         accuracy = accuracy_score(y_true=y_val, y_pred=model.predict(X_val))
         return jsonify({'accuracy': str(accuracy)})
         
     except Exception as e:
-        # Handle any errors during training or saving
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
 

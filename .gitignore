@@ -3,6 +3,3 @@
 
 # Ignore automatically generated files and directories
 __pycache__/
-
-# Ignore Luis Tamayo project
-app_LuTaOr.py
