@@ -132,6 +132,7 @@ def accuracy():
         # Handle any errors during training or saving
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
+
 # LUIS TAMAYO
 @app.route('/webhook', methods=['POST'])
 def webhook():
