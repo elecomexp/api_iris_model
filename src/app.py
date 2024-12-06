@@ -44,7 +44,6 @@ app.config['DEBUG'] = True
 download_data(data_path=DATA_PATH)
 model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 
-
 # Landing page route
 @app.route('/', methods=['GET'])
 def home():
@@ -68,7 +67,6 @@ def home():
         status=200,
         mimetype='application/json'
     )
-
 
 # Perform prediction
 @app.route('/api/v1/predict', methods=['GET'])
@@ -101,7 +99,6 @@ def predict():
         }
     })
 
-
 # Retrain the model with existing dataset and evaluate the new accuracy
 @app.route('/api/v1/retrain', methods=['GET'])
 def retrain():
@@ -119,7 +116,6 @@ def retrain():
     else:
         return jsonify({'error': 'Dataset for retraining not found'}), 404
 
-
 # Calculate and return the accuracy of the current saved model on a validation dataset
 @app.route('/api/v1/accuracy', methods=['GET'])
 def accuracy():
@@ -131,7 +127,6 @@ def accuracy():
         
     except Exception as e:
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
-
 
 # Webhook
 @app.route('/webhook', methods=['POST'])
