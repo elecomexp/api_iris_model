@@ -49,7 +49,7 @@ model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'Welcome to the Iris model prediction API',
+        'message': 'LALALA Welcome to the Iris model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
@@ -140,7 +140,6 @@ def webhook():
         return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
     else:
         return jsonify({'error': 'Solicitud no válida'}), 400
-
 
 # Webhook
 # @app.route('/webhook', methods=['POST'])
