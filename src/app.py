@@ -128,7 +128,7 @@ def accuracy():
     except Exception as e:
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
-# # Webhook
+# Webhook
 @app.route('/webhook', methods=['POST'])
 def webhook():
     repo_path = '/home/elecomexp/api_iris_model'
