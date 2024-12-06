@@ -24,6 +24,7 @@ The API also includes basic error handling for missing or invalid parameters, an
 # Libraries
 import json
 import os
+import subprocess
 
 from flask import Flask, jsonify, request
 from sklearn.metrics import accuracy_score
@@ -34,7 +35,7 @@ from utils.variables import (CLASS_MAPPING, MODEL_PATH, TRAIN_PATH,
                              VALIDATION_PATH)
 
 # Change the current working directory to the directory of this script
-os.chdir(os.path.dirname(__file__))
+# os.chdir(os.path.dirname(__file__))
 
 # Create a Flask application instance and enable debug mode for development
 app = Flask(__name__)
@@ -131,18 +132,18 @@ def accuracy():
         # Handle any errors during training or saving
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
-# # LUIS TAMAYO
-# @app.route('/webhook', methods=['POST'])
-# def webhook():
-#     repo_path = '/home/LuTaOr/Despliegue_API'
-#     server_wsgi = '/var/www/lutaor_pythonanywhere_com_wsgi.py'
+# LUIS TAMAYO
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    repo_path = '/home/elecomexp/api_iris_model'
+    server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
 
-#     if request.is_json:
-#         subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-#         subprocess.run(['touch', server_wsgi], check=True)
-#         return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
-#     else:
-#         return jsonify({'error': 'Solicitud no válida'}), 400
+    if request.is_json:
+        subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
+        subprocess.run(['touch', server_wsgi], check=True)
+        return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
+    else:
+        return jsonify({'error': 'Solicitud no válida'}), 400
 
 
 if __name__ == '__main__':
