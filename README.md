@@ -1,4 +1,4 @@
-# API Iris Model 
+# API Iris Flower Model 
 
 A simple lightweight API built with [Flask](https://flask.palletsprojects.com/en/stable/) for deploying a machine learning model trained on the Iris flower dataset. This project demonstrates how to integrate and serve ML models through a RESTful API, deployed on [PythonAnywhere](https://www.pythonanywhere.com/) for easy access.
 
