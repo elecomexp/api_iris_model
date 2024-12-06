@@ -35,7 +35,7 @@ from utils.variables import (CLASS_MAPPING, MODEL_PATH, TRAIN_PATH,
                              VALIDATION_PATH)
 
 # Change the current working directory to the directory of this script
-# os.chdir(os.path.dirname(__file__))
+os.chdir(os.path.dirname(__file__))
 
 # Create a Flask application instance and enable debug mode for development
 app = Flask(__name__)
