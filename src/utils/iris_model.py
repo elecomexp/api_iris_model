@@ -4,7 +4,8 @@ import pickle
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
 
 def initialize_model(train_path, model_path):
     """
