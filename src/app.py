@@ -40,7 +40,7 @@ os.chdir(os.path.dirname(__file__))
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-# Download data. Load or initi
+# Download data; and load or initialize model
 download_data(data_path=DATA_PATH)
 model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 
@@ -129,8 +129,6 @@ def accuracy():
     except Exception as e:
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
-
-# LUIS TAMAYO
 @app.route('/webhook', methods=['POST'])
 def webhook():
     repo_path = '/home/elecomexp/api_iris_model'
