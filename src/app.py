@@ -128,18 +128,18 @@ def accuracy():
     except Exception as e:
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
-# Webhook
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    repo_path = '/home/elecomexp/api_iris_model'
-    server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
+# # Webhook
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     repo_path = '/home/elecomexp/api_iris_model'
+#     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
 
-    if request.is_json:
-        subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-        subprocess.run(['touch', server_wsgi], check=True)
-        return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
-    else:
-        return jsonify({'error': 'Solicitud no válida'}), 400
+#     if request.is_json:
+#         subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
+#         subprocess.run(['touch', server_wsgi], check=True)
+#         return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
+#     else:
+#         return jsonify({'error': 'Solicitud no válida'}), 400
 
 
 # Webhook
