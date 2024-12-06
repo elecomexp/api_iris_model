@@ -49,7 +49,7 @@ model = initialize_model(train_path=TRAIN_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'LELELE Welcome to the Iris model prediction API',
+        'message': 'Welcome to the Iris model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
