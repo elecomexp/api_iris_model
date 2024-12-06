@@ -129,56 +129,56 @@ def accuracy():
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
 # # Webhook
-# @app.route('/webhook', methods=['POST'])
-# def webhook():
-#     repo_path = '/home/elecomexp/api_iris_model'
-#     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
-
-#     if request.is_json:
-#         subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-#         subprocess.run(['touch', server_wsgi], check=True)
-#         return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
-#     else:
-#         return jsonify({'error': 'Solicitud no válida'}), 400
-
-
-# Webhook
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    # Path to the repository
     repo_path = '/home/elecomexp/api_iris_model'
     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
 
-    # Check if the POST request contains JSON data
     if request.is_json:
-        payload = request.json
-
-        # Verify if the payload contains repository information
-        if 'repository' in payload:
-            # Extract repository name and clone URL with default values to avoid KeyError
-            repo_name = payload['repository'].get('name', 'Unknown')
-            clone_url = payload['repository'].get('clone_url', None)
-
-            # Check repository directory
-            if not os.path.exists(repo_path):
-                return jsonify({'message': 'The repository directory does not exist'}), 404
-            
-            # try:
-            #     os.chdir(repo_path)
-            # except FileNotFoundError:
-            #     return jsonify({'message': 'The repository directory does not exist'}), 404
-
-            # Perform a git pull in the repository, and trigger PythonAnywhere web server reload
-            try:
-                subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-                subprocess.run(['touch', server_wsgi], check=True)  
-                return jsonify({'message': f'Git pull successfully executed on repository {repo_name}'}), 200
-            except subprocess.CalledProcessError:
-                return jsonify({'message': f'Error occurred while performing git pull on repository {repo_name}'}), 500
-        else:
-            return jsonify({'message': 'No repository information found in the payload'}), 400
+        subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
+        subprocess.run(['touch', server_wsgi], check=True)
+        return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
     else:
-        return jsonify({'message': 'The request does not contain valid JSON'}), 400
+        return jsonify({'error': 'Solicitud no válida'}), 400
+
+
+# Webhook
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     # Path to the repository
+#     repo_path = '/home/elecomexp/api_iris_model'
+#     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
+
+#     # Check if the POST request contains JSON data
+#     if request.is_json:
+#         payload = request.json
+
+#         # Verify if the payload contains repository information
+#         if 'repository' in payload:
+#             # Extract repository name and clone URL with default values to avoid KeyError
+#             repo_name = payload['repository'].get('name', 'Unknown')
+#             clone_url = payload['repository'].get('clone_url', None)
+
+#             # Check repository directory
+#             if not os.path.exists(repo_path):
+#                 return jsonify({'message': 'The repository directory does not exist'}), 404
+            
+#             # try:
+#             #     os.chdir(repo_path)
+#             # except FileNotFoundError:
+#             #     return jsonify({'message': 'The repository directory does not exist'}), 404
+
+#             # Perform a git pull in the repository, and trigger PythonAnywhere web server reload
+#             try:
+#                 subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
+#                 subprocess.run(['touch', server_wsgi], check=True)  
+#                 return jsonify({'message': f'Git pull successfully executed on repository {repo_name}'}), 200
+#             except subprocess.CalledProcessError:
+#                 return jsonify({'message': f'Error occurred while performing git pull on repository {repo_name}'}), 500
+#         else:
+#             return jsonify({'message': 'No repository information found in the payload'}), 400
+#     else:
+#         return jsonify({'message': 'The request does not contain valid JSON'}), 400
 
 
 # Main
