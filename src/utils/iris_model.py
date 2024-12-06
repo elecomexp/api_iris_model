@@ -66,20 +66,6 @@ def load_model(model_path):
 
     return model
 
-    
-def train_model(X_train, y_train):
-    """
-    Train a new Logistic Regression model on the dataset.
-    """
-    print('Training new model...')    
-    # Initialize and train the model
-    # model = LogisticRegression(max_iter=200)
-    model = RandomForestClassifier(min_samples_leaf=30)
-    model.fit(X_train, y_train)
-    print('Model trained')
-    
-    return model
-
 
 def load_data(data_path):
     """
@@ -97,6 +83,20 @@ def load_data(data_path):
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
     
     return X_train, X_val, y_train, y_val
+
+    
+def train_model(X_train, y_train):
+    """
+    Train a new Logistic Regression model on the dataset.
+    """
+    print('Training new model...')    
+    # Initialize and train the model
+    # model = LogisticRegression(max_iter=200)
+    model = RandomForestClassifier(min_samples_leaf=30)
+    model.fit(X_train, y_train)
+    print('Model trained')
+    
+    return model
 
 
 def save_model(model, model_path):
