@@ -49,7 +49,7 @@ model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'LALALA Welcome to the Iris model prediction API',
+        'message': 'Welcome to the Iris model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
@@ -141,43 +141,41 @@ def webhook():
     else:
         return jsonify({'error': 'Solicitud no válida'}), 400
 
-# Webhook
-# @app.route('/webhook', methods=['POST'])
+# # Webhook
+# @app.route("/webhook", methods=["POST"])
 # def webhook():
-#     # Path to the repository
-#     repo_path = '/home/elecomexp/api_iris_model'
-#     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
+#     # Ruta al repositorio donde se realizará el pull
+#     path_repo = "/home/Elecomexp/despliegue_git"
+#     servidor_web = "/var/www/elecomexp_pythonanywhere_com_wsgi.py"
 
-#     # Check if the POST request contains JSON data
+#     # Comprueba si la solicitud POST contiene datos JSON
 #     if request.is_json:
 #         payload = request.json
+#         # Verifica si la carga útil (payload) contiene información sobre el repositorio
+#         if "repository" in payload:
+#             # Extrae el nombre del repositorio y la URL de clonación
+#             repo_name = payload["repository"]["name"]
+#             clone_url = payload["repository"]["clone_url"]
 
-#         # Verify if the payload contains repository information
-#         if 'repository' in payload:
-#             # Extract repository name and clone URL with default values to avoid KeyError
-#             repo_name = payload['repository'].get('name', 'Unknown')
-#             clone_url = payload['repository'].get('clone_url', None)
-
-#             # Check repository directory
-#             if not os.path.exists(repo_path):
-#                 return jsonify({'message': 'The repository directory does not exist'}), 404
-            
-#             # try:
-#             #     os.chdir(repo_path)
-#             # except FileNotFoundError:
-#             #     return jsonify({'message': 'The repository directory does not exist'}), 404
-
-#             # Perform a git pull in the repository, and trigger PythonAnywhere web server reload
+#             # Cambia al directorio del repositorio
 #             try:
-#                 subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-#                 subprocess.run(['touch', server_wsgi], check=True)  
-#                 return jsonify({'message': f'Git pull successfully executed on repository {repo_name}'}), 200
+#                 os.chdir(path_repo)
+#             except FileNotFoundError:
+#                 return jsonify({"message": "El directorio del repositorio no existe!"}), 404
+
+#             # Realiza un git pull en el repositorio, trick to automatically reload PythonAnywhere WebServer
+#             try:
+#                 subprocess.run(["git", "pull", clone_url], check=True)
+#                 subprocess.run(["touch", servidor_web], check=True)  
+#                 return jsonify(
+#                     {"message": f"Se realizó un git pull en el repositorio {repo_name}"}
+#                 ), 200
 #             except subprocess.CalledProcessError:
-#                 return jsonify({'message': f'Error occurred while performing git pull on repository {repo_name}'}), 500
+#                 return jsonify({"message": f"Error al realizar git pull en el repositorio {repo_name}"}), 500
 #         else:
-#             return jsonify({'message': 'No repository information found in the payload'}), 400
+#             return jsonify({"message": "No se encontró información sobre el repositorio en la carga útil (payload)"}), 400
 #     else:
-#         return jsonify({'message': 'The request does not contain valid JSON'}), 400
+#         return jsonify({"message": "La solicitud no contiene datos JSON"}), 400
 
 
 # Main
