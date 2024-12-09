@@ -137,9 +137,9 @@ def webhook():
     if request.is_json:
         subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
         subprocess.run(['touch', server_wsgi], check=True)
-        return jsonify({'message': 'Despliegue actualizado con éxito'}), 200
+        return jsonify({'message': 'Deployment updated successfully'}), 200
     else:
-        return jsonify({'error': 'Solicitud no válida'}), 400
+        return jsonify({'error': 'Invalid request'}), 400
 
 # # Webhook
 # @app.route("/webhook", methods=["POST"])
