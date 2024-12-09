@@ -17,6 +17,9 @@ from sklearn.model_selection import train_test_split
 
 
 def download_data(data_path):
+    """
+    Download data from scikit-learn library.
+    """
     # Check if file already exists
     if os.path.exists(data_path):
         print(f"The data already exists in {data_path}. No action taken")
