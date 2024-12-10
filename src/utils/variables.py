@@ -2,8 +2,13 @@
 variables.py
 
 Author: Lander Combarro Exposito
-Created: 2024/04/12
-Last Modified: 2024/04/12
+Created: December 04, 2024
+Last Modified: December 04, 2024
+
+Description
+-----------
+This module defines constants and configurations for the Iris Dataset Classification API,
+including paths to data and models, and mappings for class labels to Iris flower species.
 """
 
 # Relative paths
