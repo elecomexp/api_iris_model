@@ -51,7 +51,7 @@ model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'LELE Welcome to the Iris flower model prediction API',
+        'message': 'Welcome to the Iris flower model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
@@ -144,7 +144,7 @@ def accuracy():
 #         return jsonify({'error': 'Invalid request'}), 400
 
 # Webhook
-@app.route("/webhook", methods=["POST"])
+@app.route('/webhook', methods=['POST'])
 def webhook():
     # Path to the repository where the pull will be performed
     path_repo = '/home/elecomexp/api_iris_model'
@@ -154,28 +154,28 @@ def webhook():
     if request.is_json:
         payload = request.json
         # Check if the payload contains repository information
-        if "repository" in payload:
+        if 'repository' in payload:
             # Extract repository name and clone URL
-            repo_name = payload["repository"]["name"]
-            clone_url = payload["repository"]["clone_url"]
+            repo_name = payload['repository']['name']
+            clone_url = payload['repository']['clone_url']
 
             # Change to the repository directory
             try:
                 os.chdir(path_repo)
             except FileNotFoundError:
-                return jsonify({"message": "The repository directory does not exist!"}), 404
+                return jsonify({'message': 'The repository directory does not exist!'}), 404
 
             # Perform a git pull in the repository, trick to automatically reload PythonAnywhere WebServer
             try:
-                subprocess.run(["git", "pull", clone_url], check=True)
-                subprocess.run(["touch", server_wsgi], check=True)  
-                return jsonify({"message": f"A git pull was performed on the repository {repo_name}"}), 200
+                subprocess.run(['git', 'pull', clone_url], check=True)
+                subprocess.run(['touch', server_wsgi], check=True)  
+                return jsonify({'message': f'A git pull was performed on the repository {repo_name}'}), 200
             except subprocess.CalledProcessError:
-                return jsonify({"message": f"Error performing git pull on the repository {repo_name}"}), 500
+                return jsonify({'message': f'Error performing git pull on the repository {repo_name}'}), 500
         else:
-            return jsonify({"message": "No repository information found in the payload"}), 400
+            return jsonify({'message': 'No repository information found in the payload'}), 400
     else:
-        return jsonify({"message": "The request does not contain JSON data"}), 400
+        return jsonify({'message': 'The request does not contain JSON data'}), 400
 
 
 # Main
