@@ -1,7 +1,0 @@
-Implement Pipelines:
-- Shuffle the data before training (since the data is ordered).
-- Apply StandardScaler (although in this case, the features are already on a similar scale, so it might not provide significant improvement).
-- Use GridSearchCV to select the best model based on hyperparameter optimization.
-- Automatically encode the labels using LabelEncoder() instead of manually creating a mapping dictionary.
-
-Improve the Welcome Window
