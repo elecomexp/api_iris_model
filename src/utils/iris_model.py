@@ -127,7 +127,7 @@ def train_model(X_train, y_train):
     print('Training new model...')    
     # Initialize and train the model
     # model = LogisticRegression(max_iter=200)
-    model = RandomForestClassifier(min_samples_leaf=30)
+    model = RandomForestClassifier(min_samples_leaf=30)     # Not hyperparameter-optimized
     model.fit(X_train, y_train)
     print('Model trained')
     
