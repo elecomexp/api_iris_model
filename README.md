@@ -10,7 +10,7 @@ A simple lightweight API built with [Flask](https://flask.palletsprojects.com/en
 
 ## Notes on Model Performance
 
-The classification model used in this API is not optimized for maximum accuracy. The hyperparameters were left in a sub-optimal state intentionally, as the focus of this project is to demonstrate how a model can be deployed and served via a RESTful API, rather than achieving high performance. This conscious decision allows users to explore how changes in model configuration impact accuracy and other evaluation metrics.
+**The classification model used in this API is not optimized for maximum accuracy.** The hyperparameters were left in a sub-optimal state intentionally, as the focus of this project is to demonstrate how a model can be deployed and served via a RESTful API, rather than achieving high performance. This conscious decision allows users to explore how changes in model configuration impact accuracy and other evaluation metrics.
 
 ## Deployment
 
