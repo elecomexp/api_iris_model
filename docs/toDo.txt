@@ -1,11 +1,7 @@
-Hacer Pipelines para que el modelo:
- - Baraje los datos antes de entrenar (porque están ordenados)
- - Haga un StandardScaler (aunque en este problema tiene el mismo orden de magnitud y no sería estrictamente necesario. De hecho probablemente no mejore nada)
- - Se podría hacer un GridSearch para escoger el mejor modelo
- - Se podría hacer un LabelEncoder() para las etiquetas se pongan automáticamente en lugar de con un diccionario
+Implement Pipelines:
+- Shuffle the data before training (since the data is ordered).
+- Apply StandardScaler (although in this case, the features are already on a similar scale, so it might not provide significant improvement).
+- Use GridSearchCV to select the best model based on hyperparameter optimization.
+- Automatically encode the labels using LabelEncoder() instead of manually creating a mapping dictionary.
 
-La ventana de bienvenida se podría mejorar como ha dicho Luis
-
-Preguntar a Luis como ha implementado la linea 111 del wsgi para su despliegue online: ¿from app import app as application  # noqa?
-
-.
+Improve the Welcome Window
