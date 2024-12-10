@@ -2,22 +2,24 @@
 app.py
 
 Author: Lander Combarro Exposito
-Created: 2024/04/12
-Last Modified: 2024/04/12
+Created: December 04, 2024
+Last Modified: December 10, 2024
 
 Iris Model Prediction API
 -------------------------
 This Flask API provides functionality for predicting the species of an Iris flower
-based on its sepal and petal measurements. The model is a Logistic Regression 
-trained on the Iris dataset.
+based on its sepal and petal measurements. It also offers functionality for 
+retraining the underlying model and evaluating its accuracy.
 
 Endpoints
 ---------
-- GET /api/v1/predict: Predict the Iris flower species based on input features (sepal_length, sepal_width, petal_length, petal_width).
-- GET /api/v1/retrain: Re-train the model with a new dataset and update the saved model.
-- GET /api/v1/accuracy: Calculate and return the accuracy of the current trained model on the validation dataset. 
-- POST /webhook: Update the model by pulling the latest changes from the GitHub repository (used for deployment).
+- GET /api/v1/predict: Predicts the Iris flower species based on input features (sepal_length, sepal_width, petal_length, petal_width).
+- GET /api/v1/retrain: Re-trains the model with a new dataset and update the saved model.
+- GET /api/v1/accuracy: Calculates and returns the accuracy of the current trained model on the validation dataset. 
+- POST /webhook: Updates the model by pulling the latest changes from the GitHub repository (used for deployment).
 
+Error Handling
+--------------
 The API also includes basic error handling for missing or invalid parameters, and ensures that the model is always available for predictions.
 """
 
@@ -49,7 +51,7 @@ model = load_or_initialize_model(data_path=DATA_PATH, model_path=MODEL_PATH)
 def home():
     # Define the response dictionary with message and available endpoints
     response = {
-        'message': 'Welcome to the Iris flower model prediction API',
+        'message': 'LELE Welcome to the Iris flower model prediction API',
         'endpoints': {
             '/api/v1/predict': 'Provides predictions based on input features (GET)',
             '/api/v1/retrain': 'Retrains the model with a new dataset (GET)',
@@ -128,54 +130,52 @@ def accuracy():
     except Exception as e:
         return jsonify({'error': f'An error occurred during retraining: {str(e)}'}), 500
 
+# # Simple webhook
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     repo_path = '/home/elecomexp/api_iris_model'
+#     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
+
+#     if request.is_json:
+#         subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
+#         subprocess.run(['touch', server_wsgi], check=True)
+#         return jsonify({'message': 'Deployment updated successfully'}), 200
+#     else:
+#         return jsonify({'error': 'Invalid request'}), 400
+
 # Webhook
-@app.route('/webhook', methods=['POST'])
+@app.route("/webhook", methods=["POST"])
 def webhook():
-    repo_path = '/home/elecomexp/api_iris_model'
+    # Path to the repository where the pull will be performed
+    path_repo = '/home/elecomexp/api_iris_model'
     server_wsgi = '/var/www/elecomexp_pythonanywhere_com_wsgi.py'
 
+    # Check if the POST request contains JSON data
     if request.is_json:
-        subprocess.run(['git', '-C', repo_path, 'pull'], check=True)
-        subprocess.run(['touch', server_wsgi], check=True)
-        return jsonify({'message': 'Deployment updated successfully'}), 200
+        payload = request.json
+        # Check if the payload contains repository information
+        if "repository" in payload:
+            # Extract repository name and clone URL
+            repo_name = payload["repository"]["name"]
+            clone_url = payload["repository"]["clone_url"]
+
+            # Change to the repository directory
+            try:
+                os.chdir(path_repo)
+            except FileNotFoundError:
+                return jsonify({"message": "The repository directory does not exist!"}), 404
+
+            # Perform a git pull in the repository, trick to automatically reload PythonAnywhere WebServer
+            try:
+                subprocess.run(["git", "pull", clone_url], check=True)
+                subprocess.run(["touch", server_wsgi], check=True)  
+                return jsonify({"message": f"A git pull was performed on the repository {repo_name}"}), 200
+            except subprocess.CalledProcessError:
+                return jsonify({"message": f"Error performing git pull on the repository {repo_name}"}), 500
+        else:
+            return jsonify({"message": "No repository information found in the payload"}), 400
     else:
-        return jsonify({'error': 'Invalid request'}), 400
-
-# # Webhook
-# @app.route("/webhook", methods=["POST"])
-# def webhook():
-#     # Ruta al repositorio donde se realizará el pull
-#     path_repo = "/home/Elecomexp/despliegue_git"
-#     servidor_web = "/var/www/elecomexp_pythonanywhere_com_wsgi.py"
-
-#     # Comprueba si la solicitud POST contiene datos JSON
-#     if request.is_json:
-#         payload = request.json
-#         # Verifica si la carga útil (payload) contiene información sobre el repositorio
-#         if "repository" in payload:
-#             # Extrae el nombre del repositorio y la URL de clonación
-#             repo_name = payload["repository"]["name"]
-#             clone_url = payload["repository"]["clone_url"]
-
-#             # Cambia al directorio del repositorio
-#             try:
-#                 os.chdir(path_repo)
-#             except FileNotFoundError:
-#                 return jsonify({"message": "El directorio del repositorio no existe!"}), 404
-
-#             # Realiza un git pull en el repositorio, trick to automatically reload PythonAnywhere WebServer
-#             try:
-#                 subprocess.run(["git", "pull", clone_url], check=True)
-#                 subprocess.run(["touch", servidor_web], check=True)  
-#                 return jsonify(
-#                     {"message": f"Se realizó un git pull en el repositorio {repo_name}"}
-#                 ), 200
-#             except subprocess.CalledProcessError:
-#                 return jsonify({"message": f"Error al realizar git pull en el repositorio {repo_name}"}), 500
-#         else:
-#             return jsonify({"message": "No se encontró información sobre el repositorio en la carga útil (payload)"}), 400
-#     else:
-#         return jsonify({"message": "La solicitud no contiene datos JSON"}), 400
+        return jsonify({"message": "The request does not contain JSON data"}), 400
 
 
 # Main
