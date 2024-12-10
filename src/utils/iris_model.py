@@ -2,8 +2,15 @@
 iris_model.py
 
 Author: Lander Combarro Exposito
-Created: 2024/04/12
-Last Modified: 2024/04/12
+Created: December 04, 2024
+Last Modified: December 10, 2024
+
+Description
+-----------
+This module handles the dataset preparation, model training, 
+and model persistence for the Iris Dataset Classification API. 
+It includes functions to download the dataset, preprocess it, 
+train a new classification model, save it, and load it for predictions.
 """
 
 import os
@@ -18,7 +25,12 @@ from sklearn.model_selection import train_test_split
 
 def download_data(data_path):
     """
-    Download data from scikit-learn library.
+    Downloads the Iris dataset from scikit-learn and saves it as a CSV file.
+    
+    Notes
+    -----
+    - If the file already exists, no action is taken.
+    - The function creates the necessary directories if they do not exist.
     """
     # Check if file already exists
     if os.path.exists(data_path):
@@ -43,7 +55,13 @@ def download_data(data_path):
 
 def load_or_initialize_model(data_path, model_path):
     """
-    Load an existing model from disk or train a new model if none exists.
+    Loads an existing model from disk or trains a new one if no model is found.
+    
+    Notes
+    -----
+    - If the model file exists, it is loaded directly.
+    - If the model file does not exist, the function trains a new model
+      using the dataset and saves it to the specified path.
     """
     # Check if the model exists, if so, load it
     if os.path.exists(model_path):
@@ -59,7 +77,11 @@ def load_or_initialize_model(data_path, model_path):
 
 def load_model(model_path):
     """
-    Load existing model.
+    Loads a pre-trained model from a pickle file. Returns the model.  
+    
+    Raises
+    ------    
+    - FileNotFoundError: If the specified model file does not exist.
     """
     if os.path.exists(model_path):
         print(f'Loading existing model from {model_path}...')
@@ -72,7 +94,11 @@ def load_model(model_path):
 
 def load_data(data_path):
     """
-    Load local data.
+    Loads the Iris dataset from a CSV file and splits it into training and validation sets.
+
+    Raises
+    ------
+    - FileNotFoundError: If the dataset file does not exist.
     """
     # Check if the dataset exists
     if not os.path.exists(data_path):
@@ -90,7 +116,13 @@ def load_data(data_path):
     
 def train_model(X_train, y_train):
     """
-    Train a new Logistic Regression model on the dataset.
+    Trains a new classification model using the provided training data.
+
+    Notes
+    -----
+    - The function currently uses a RandomForestClassifier with
+      a minimum leaf sample size of 30.
+    - Model training can be adapted by modifying the classifier.
     """
     print('Training new model...')    
     # Initialize and train the model
@@ -104,7 +136,12 @@ def train_model(X_train, y_train):
 
 def save_model(model, model_path):
     """
-    Save the trained model to the specified path.
+    Saves the trained model to a pickle file.
+
+    Notes
+    -----
+    - Creates necessary directories if they do not exist.
+    - Overwrites the existing file at the specified path if it exists.
     """
     print('Saving the trained model...')
     
